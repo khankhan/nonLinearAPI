@@ -635,7 +635,7 @@ namespace CrmEnabledWPFWindowsClient1
                 ret = 100000007;
             else if (leadSource.ToUpper().Equals("Costa Rica".ToUpper()))
                 ret = 100000008;
-            else if (leadSource.ToUpper().Equals("Egypt".ToUpper()))
+            else if (leadSource.ToUpper().Equals("Egypt".ToUpper())
                 ret = 100000009;
             else if (leadSource.ToUpper().Equals("France".ToUpper()))
                 ret = 100000010;
