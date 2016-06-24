@@ -50,7 +50,7 @@ namespace CrmEnabledWPFWindowsClient1
             List<Marketing> oListMarketing = new List<Marketing>();
 
             Excel.Range range;
-            workbook = excelApp.Workbooks.Open("C:\\Download\\june2016\\Testing.xlsx");
+            workbook = excelApp.Workbooks.Open("C:\\Users\\Sana\\Desktop\\NoNLinear\\Book1.xlsx");
             worksheet = (Excel.Worksheet)workbook.Sheets["ENTERPRISE WEEKLY CRM IMPORTS"];
 
             int column = 0;
@@ -95,7 +95,7 @@ namespace CrmEnabledWPFWindowsClient1
             dt.Columns.Add("Extra Books Sent");
             dt.Columns.Add("Website");
             dt.Columns.Add("Sitecore User");
-    
+
             for (row = 2; row <= range.Rows.Count; row++)
             {
                 DataRow dr = dt.NewRow();
@@ -121,10 +121,11 @@ namespace CrmEnabledWPFWindowsClient1
                                     DateTime.TryParse((string)value, out dts);
                                 }
                             }
-                          //  MessageBox.Show(dts.ToString());
+                            //  MessageBox.Show(dts.ToString());
                             dr[column - 1] = dts.ToString();
 
-                        } else if (column == 11 || column == 12)
+                        }
+                        else if (column == 11 || column == 12)
                         {
                             object value = (range.Cells[row, column] as Excel.Range).Value2;
                             double d;
@@ -134,9 +135,10 @@ namespace CrmEnabledWPFWindowsClient1
                                 {
                                     d = ((double)value);
                                     dr[column - 1] = d.ToString();
-                            //        MessageBox.Show(d.ToString());
+                                    //        MessageBox.Show(d.ToString());
                                 }
-                            } else
+                            }
+                            else
                             {
                                 dr[column - 1] = string.Empty;
                             }
@@ -151,7 +153,7 @@ namespace CrmEnabledWPFWindowsClient1
                                 {
                                     d = ((double)value);
                                     dr[column - 1] = d.ToString();
-                          //          MessageBox.Show(d.ToString());
+                                    //          MessageBox.Show(d.ToString());
                                 }
                             }
                             else
@@ -162,23 +164,24 @@ namespace CrmEnabledWPFWindowsClient1
                         }
                         else
                         {
-                        //    MessageBox.Show((range.Cells[row, column] as Excel.Range).Value2);
+                            //    MessageBox.Show((range.Cells[row, column] as Excel.Range).Value2);
                             dr[column - 1] = (range.Cells[row, column] as Excel.Range).Value2;
 
                         }
                     }
-                    catch (Exception ee){
+                    catch (Exception ee)
+                    {
                         MessageBox.Show(ee.Message);
 
                     }
-               
+
                 }
-       
+
                 dt.Rows.Add(dr);
                 Console.Write(dt.Rows.Count + "\n");
                 dt.AcceptChanges();
 
-                if (dt.Rows.Count == 28)
+                if (dt.Rows.Count == 200)
                     break;
             }
             workbook.Close(true, Missing.Value, Missing.Value);
@@ -262,10 +265,10 @@ namespace CrmEnabledWPFWindowsClient1
                 //"Website"
                 oMarketing.Website = dt.Rows[i][36].ToString();
                 //"Sitecore User"
-              //  oMarketing.SitecoreUser = dt.Rows[i][37].ToString();
-                
+                //  oMarketing.SitecoreUser = dt.Rows[i][37].ToString();
+
                 oListMarketing.Add(oMarketing);
-                i ++;
+                i++;
             }
             #endregion
 
@@ -285,6 +288,75 @@ namespace CrmEnabledWPFWindowsClient1
 
             #endregion
 
+            #region LeadScore
+            // if (ctrl.CrmConnectionMgr != null && ctrl.CrmConnectionMgr.CrmSvc != null && ctrl.CrmConnectionMgr.CrmSvc.IsReady)
+            // {
+            //     CrmServiceClient svcClients = ctrl.CrmConnectionMgr.CrmSvc;
+            //     if (svcClients.IsReady)
+            //     {
+
+            //         //Load Lead
+            //         // Get data from CRM . 
+            //         string FetchXML =
+            //              @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+            //                             <entity name='lead'>
+            //                                 <attribute name='firstname' />
+            //                                 <attribute name='lastname' />
+            //                                 <attribute name='contactid' />
+            //                                 <attribute name = 'companyname' />
+            //                               </entity>
+            //                             </fetch>";
+
+            //         // 
+            //         //<attribute name='leadid' />
+            //         //  <order attribute='firstname' descending='false' />
+
+
+            //         var Result = svcClients.GetEntityDataByFetchSearchEC(FetchXML).Entities.ToList();
+            //         List<Lead> oLead = new List<Lead>();
+            //         foreach (Lead c in Result)
+            //         {
+            //             oLead.Add(c);
+            //         }
+
+
+            //         foreach (Marketing osMarketing in oListMarketing)
+            //         {
+            //           //  osMarketing.FirstName = "Ken";
+            //           //  osMarketing.LastName = "Hoff";
+            //           //  osMarketing.CompanyName = "Langley School Board No 35";
+
+            //              // Load data from the Excelsheet
+            //              Lead o = oLead.FirstOrDefault(x => ((x.FirstName != null && x.FirstName.ToUpper().Equals(osMarketing.FirstName.ToUpper())) &&
+            //                                                 (x.LastName != null && x.LastName.ToUpper().Equals(osMarketing.LastName.ToUpper())) &&
+            //                                                 (x.CompanyName != null && x.CompanyName.ToUpper().Equals(osMarketing.CompanyName.ToUpper()))
+            //              ));
+
+            //         if(o!= null)
+            //         { 
+            //                     try
+            //                     {
+            //                         Entity LeadENt = new Entity("lead");
+            //                         LeadENt.Attributes.Add("leadid", o.LeadId);
+            //                         LeadENt.Attributes.Add("new_marketingleadsource", new OptionSetValue(this.SetLeadSource(osMarketing.LeadSource)));
+            //                         svcClients.OrganizationServiceProxy.Update(LeadENt);
+            //                         Console.Write("Found Lead  - " +osMarketing.FirstName + "," + osMarketing.LastName + "\n");
+            //                     }
+            //                     catch (Exception e1)
+            //                     {
+            //                         Console.Write("Not Lead  - " + e1.Message + "\n");
+            //                         Console.Write("Not osMarketing- " + osMarketing + "\n");
+
+            //                     }
+            //           }else
+            //             {
+            //                 Console.Write("Not Found Lead  - " + osMarketing.FirstName + "," + osMarketing.LastName + "\n");
+            //             }
+            //        }
+            //    }
+            //}
+            #endregion
+
             #region CRMServiceClient
             if (ctrl.CrmConnectionMgr != null && ctrl.CrmConnectionMgr.CrmSvc != null && ctrl.CrmConnectionMgr.CrmSvc.IsReady)
             {
@@ -294,8 +366,8 @@ namespace CrmEnabledWPFWindowsClient1
 
                     //Load Lead
                     // Get data from CRM . 
-                   string FetchXML =
-                        @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                    string FetchXML =
+                         @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                         <entity name='lead'>
                                             <attribute name='firstname' />
                                             <attribute name='lastname' />
@@ -313,10 +385,11 @@ namespace CrmEnabledWPFWindowsClient1
                     List<Lead> oLead = new List<Lead>();
                     foreach (Lead c in Result)
                     {
-                        oLead.Add(c);  
+                        oLead.Add(c);
                     }
 
                     int Index = 1;
+
 
                     foreach (Marketing osMarketing in oListMarketing)
                     {
@@ -334,106 +407,108 @@ namespace CrmEnabledWPFWindowsClient1
 
                         if (o == null)
                         {
-                          try {
+                            try
+                            {
                                 CreateRequest req = new CreateRequest();
-                                    Entity LeadENt = new Entity("lead");
-                                    LeadENt.Attributes.Add("subject", osMarketing.ProjectName);
-                                    LeadENt.Attributes.Add("new_marketingleadsource", new OptionSetValue(this.SetLeadSource(osMarketing.LeadSource)));
-                                    LeadENt.Attributes.Add("nlc_division", new OptionSetValue(857710001));
-                                    LeadENt.Attributes.Add("firstname", osMarketing.FirstName);
-                                    LeadENt.Attributes.Add("lastname", osMarketing.LastName);
-                                    LeadENt.Attributes.Add("companyname", osMarketing.CompanyName);
-                                    LeadENt.Attributes.Add("nlc_jobfunction", new OptionSetValue(this.SetFunction(osMarketing.Function)));
-                                    LeadENt.Attributes.Add("nlc_seniority", new OptionSetValue(this.SetSeniority(osMarketing.Seniority)));
-                                    LeadENt.Attributes.Add("nlc_industry", new OptionSetValue(this.SetIndustry(osMarketing.Industry)));
+                                Entity LeadENt = new Entity("lead");
+                                LeadENt.Attributes.Add("subject", osMarketing.ProjectName);
+                                LeadENt.Attributes.Add("new_marketingleadsource", new OptionSetValue(this.SetLeadSource(osMarketing.LeadSource)));
+                                LeadENt.Attributes.Add("nlc_division", new OptionSetValue(857710001));
+                                LeadENt.Attributes.Add("firstname", osMarketing.FirstName);
+                                LeadENt.Attributes.Add("lastname", osMarketing.LastName);
+                                LeadENt.Attributes.Add("companyname", osMarketing.CompanyName);
+                                LeadENt.Attributes.Add("nlc_jobfunction", new OptionSetValue(this.SetFunction(osMarketing.Function)));
+                                LeadENt.Attributes.Add("nlc_seniority", new OptionSetValue(this.SetSeniority(osMarketing.Seniority)));
+                                LeadENt.Attributes.Add("nlc_industry", new OptionSetValue(this.SetIndustry(osMarketing.Industry)));
 
-                                    if (osMarketing.JobTitle.Length > 100)
-                                            LeadENt.Attributes.Add("jobtitle", osMarketing.JobTitle.Substring(0,99));
+                                if (osMarketing.JobTitle.Length > 100)
+                                    LeadENt.Attributes.Add("jobtitle", osMarketing.JobTitle.Substring(0, 99));
+                                else
+                                    LeadENt.Attributes.Add("jobtitle", osMarketing.JobTitle);
+
+                                //Leigh-Ann Redmond
+                                LeadENt.Attributes.Add("ownerid", new EntityReference("systemuser", new Guid("b441b00b-eb7b-e511-80d9-3863bb35af70")));
+
+                                //Address
+                                string address = osMarketing.Street + " " + osMarketing.City + " " + osMarketing.Province + " " + osMarketing.Country;
+                                if (!string.IsNullOrEmpty(address))
+                                    LeadENt.Attributes.Add("address1_composite", address);
+                                if (!string.IsNullOrEmpty(osMarketing.City))
+                                    LeadENt.Attributes.Add("address1_city", osMarketing.City);
+                                if (!string.IsNullOrEmpty(osMarketing.Country))
+                                    LeadENt.Attributes.Add("address1_country", osMarketing.Country);
+                                if (!string.IsNullOrEmpty(osMarketing.Street))
+                                    LeadENt.Attributes.Add("address1_line1", osMarketing.Street);
+                                if (!string.IsNullOrEmpty(osMarketing.Province))
+                                    LeadENt.Attributes.Add("address1_stateorprovince", osMarketing.Province);
+
+                                try
+                                {
+
+                                    if (!string.IsNullOrEmpty(osMarketing.BookSentDate))
+                                        LeadENt.Attributes.Add("new_booksentdate", Convert.ToDateTime(osMarketing.BookSentDate));
+                                }
+                                catch { }
+
+                                if (!string.IsNullOrEmpty(osMarketing.Email))
+                                {
+                                    LeadENt.Attributes.Add("emailaddress1", osMarketing.Email);
+                                }
+
+                                if (!string.IsNullOrEmpty(osMarketing.AddToLICampaign))
+                                {
+
+                                    LeadENt.Attributes.Add("new_dateaddedtolicampaign", thisDay);
+                                }
+                                if (!string.IsNullOrEmpty(osMarketing.Notes))
+                                    LeadENt.Attributes.Add("new_marketingnote", osMarketing.Notes);
+
+                                if (!string.IsNullOrEmpty(osMarketing.AddToBookList))
+                                {
+                                    if (osMarketing.AddToBookList.Equals("Y"))
+                                        LeadENt.Attributes.Add("new_addtobooklist", new OptionSetValue(100000000));
                                     else
-                                            LeadENt.Attributes.Add("jobtitle", osMarketing.JobTitle);
+                                        LeadENt.Attributes.Add("new_addtobooklist", new OptionSetValue(100000001));
+                                }
 
-                                        //Leigh-Ann Redmond
-                                        LeadENt.Attributes.Add("ownerid", new EntityReference("systemuser", new Guid("b441b00b-eb7b-e511-80d9-3863bb35af70")));
+                                if (!string.IsNullOrEmpty(osMarketing.AddToLICampaign))
+                                {
+                                    if (osMarketing.AddToLICampaign.Equals("Y"))
+                                        LeadENt.Attributes.Add("new_addtolicampaign", new OptionSetValue(100000000));
+                                    else
+                                        LeadENt.Attributes.Add("new_addtolicampaign", new OptionSetValue(100000001));
+                                }
 
-                                        //Address
-                                        string address = osMarketing.Street + " " + osMarketing.City + " " + osMarketing.Province + " " + osMarketing.Country;                            
-                                        if (!string.IsNullOrEmpty(address))
-                                            LeadENt.Attributes.Add("address1_composite", address);
-                                        if (!string.IsNullOrEmpty(osMarketing.City))
-                                            LeadENt.Attributes.Add("address1_city", osMarketing.City);
-                                        if (!string.IsNullOrEmpty(osMarketing.Country))
-                                            LeadENt.Attributes.Add("address1_country", osMarketing.Country);
-                                        if (!string.IsNullOrEmpty(osMarketing.Street))
-                                            LeadENt.Attributes.Add("address1_line1", osMarketing.Street);
-                                        if (!string.IsNullOrEmpty(osMarketing.Province))
-                                            LeadENt.Attributes.Add("address1_stateorprovince", osMarketing.Province);
+                                //if (!string.IsNullOrEmpty(osMarketing.so))
+                                //{
+                                //    if (osMarketing.AddToLICampaign.Equals("Y"))
+                                //        LeadENt.Attributes.Add("new_addtosourcecompaign", new OptionSetValue(100000001));
+                                //    else
+                                //        LeadENt.Attributes.Add("new_addtomarketinglist", new OptionSetValue(100000000));
+                                //}
 
-                                        try
-                                        {
+                                if (!string.IsNullOrEmpty(osMarketing.SentBook))
+                                {
+                                    if (osMarketing.SentBook.Equals("Y"))
+                                        LeadENt.Attributes.Add("new_sentbook", new OptionSetValue(100000000));
+                                    else
+                                        LeadENt.Attributes.Add("new_sentbook", new OptionSetValue(100000001));
+                                }
 
-                                            if (!string.IsNullOrEmpty(osMarketing.BookSentDate))
-                                                LeadENt.Attributes.Add("new_booksentdate", Convert.ToDateTime(osMarketing.BookSentDate));
-                                        } catch { }
+                                req.Target = LeadENt;
+                                CreateResponse ress = (CreateResponse)svcClient.OrganizationServiceProxy.Execute(req);
+                                //  CreateResponse res = (CreateResponse)svcClient.ExecuteCrmOrganizationRequest(req, "MyAccountCreate");
 
-                                        if (!string.IsNullOrEmpty(osMarketing.Email))
-                                        {
-                                            LeadENt.Attributes.Add("emailaddress1", osMarketing.Email);
-                                        }
+                                Lead loadLead = new Lead();
+                                loadLead.CompanyName = osMarketing.CompanyName;
+                                loadLead.FirstName = osMarketing.FirstName;
+                                loadLead.LastName = osMarketing.LastName;
+                                loadLead.Id = ress.id;
 
-                                        if (!string.IsNullOrEmpty(osMarketing.AddToLICampaign))
-                                        {
-                               
-                                            LeadENt.Attributes.Add("new_dateaddedtolicampaign", thisDay);
-                                        }
-                                        if (!string.IsNullOrEmpty(osMarketing.Notes))
-                                            LeadENt.Attributes.Add("new_marketingnote", osMarketing.Notes);
+                                oLead.Add(loadLead);
+                                Console.Write("New Lead - " + ress.id.ToString() + " ------ " + "Index : -" + Index + "\n");
 
-                                        if (!string.IsNullOrEmpty(osMarketing.AddToBookList))
-                                        {
-                                            if (osMarketing.AddToBookList.Equals("Y"))
-                                                LeadENt.Attributes.Add("new_addtobooklist", new OptionSetValue(100000000));
-                                            else
-                                                LeadENt.Attributes.Add("new_addtobooklist", new OptionSetValue(100000001));
-                                        }
-
-                                       if (!string.IsNullOrEmpty(osMarketing.AddToLICampaign))
-                                       {
-                                           if (osMarketing.AddToLICampaign.Equals("Y"))
-                                                LeadENt.Attributes.Add("new_addtolicampaign", new OptionSetValue(100000000));
-                                            else
-                                                LeadENt.Attributes.Add("new_addtolicampaign", new OptionSetValue(100000001));
-                                       }
-
-                                       //if (!string.IsNullOrEmpty(osMarketing.so))
-                                       //{
-                                       //    if (osMarketing.AddToLICampaign.Equals("Y"))
-                                       //        LeadENt.Attributes.Add("new_addtosourcecompaign", new OptionSetValue(100000001));
-                                       //    else
-                                       //        LeadENt.Attributes.Add("new_addtomarketinglist", new OptionSetValue(100000000));
-                                       //}
-
-                                        if (!string.IsNullOrEmpty(osMarketing.SentBook))
-                                        {
-                                            if (osMarketing.SentBook.Equals("Y"))
-                                                LeadENt.Attributes.Add("new_sentbook", new OptionSetValue(100000000));
-                                            else
-                                                LeadENt.Attributes.Add("new_sentbook", new OptionSetValue(100000001));
-                                        }
-
-                                    req.Target = LeadENt;
-                                    CreateResponse ress = (CreateResponse)svcClient.OrganizationServiceProxy.Execute(req);
-                                  //  CreateResponse res = (CreateResponse)svcClient.ExecuteCrmOrganizationRequest(req, "MyAccountCreate");
-
-                                    Lead loadLead = new Lead();
-                                    loadLead.CompanyName = osMarketing.CompanyName;
-                                    loadLead.FirstName = osMarketing.FirstName;
-                                    loadLead.LastName = osMarketing.LastName;
-                                    loadLead.Id = ress.id;
-
-                                        oLead.Add(loadLead);
-                                        Console.Write("New Lead - " +  ress.id.ToString() + " ------ " + "Index : -" + Index + "\n");
-
-                                        Index++;
+                                Index++;
                                 //  MessageBox.Show(ress.id.ToString());
                             }
                             catch (Exception e1)
@@ -443,7 +518,7 @@ namespace CrmEnabledWPFWindowsClient1
 
                             }
                         }
-                    else {
+                        else {
                             #region Load lead Interaction                          
                             //string FetchXMLLeadInteraction = "<fetch mapping='logical'>" +
                             //         "<entity name='lead'> " +
@@ -464,7 +539,8 @@ namespace CrmEnabledWPFWindowsClient1
                             //    break;
                             //}
 
-                            try {
+                            try
+                            {
 
                                 CreateRequest req = new CreateRequest();
                                 Entity accENt = new Entity("nlc_leadinteractions");
@@ -479,10 +555,12 @@ namespace CrmEnabledWPFWindowsClient1
                                 if (!string.IsNullOrEmpty(osMarketing.InteractionType))
                                     accENt.Attributes.Add("new_marketinginteractiontype", new OptionSetValue(this.SetInteractionType(osMarketing.InteractionType)));
 
-                                try {
+                                try
+                                {
                                     if (!string.IsNullOrEmpty(osMarketing.InteractionDate))
                                         accENt.Attributes.Add("nlc_interactiondate", Convert.ToDateTime(osMarketing.InteractionDate));
-                                } catch { }
+                                }
+                                catch { }
 
                                 if (!string.IsNullOrEmpty(osMarketing.TotalSiteVisits))
                                     accENt.Attributes.Add("nlc_sitevisits", osMarketing.TotalSiteVisits);
@@ -574,17 +652,18 @@ namespace CrmEnabledWPFWindowsClient1
                                         accENt.Attributes.Add("new_addtolicampaign", new OptionSetValue(100000001));
                                 }
 
-  
+
                                 req.Target = accENt;
                                 CreateResponse res = (CreateResponse)svcClient.OrganizationServiceProxy.Execute(req);
                                 //CreateResponse res = (CreateResponse)svcClient.ExecuteCrmOrganizationRequest(req, "MyAccountCreate");
                                 //  MessageBox.Show(res.id.ToString());
                                 Console.Write("New Lead Interaction - " + res.id.ToString() + "\n");
-                            } catch (Exception e2)
+                            }
+                            catch (Exception e2)
                             {
                                 Console.Write("New Lead Interaction - " + e2.Message + "\n");
                                 Console.Write("New Lead Interaction osMarketing- " + osMarketing + "\n");
-                              
+
                             }
                             #endregion
                         }
@@ -635,7 +714,7 @@ namespace CrmEnabledWPFWindowsClient1
                 ret = 100000007;
             else if (leadSource.ToUpper().Equals("Costa Rica".ToUpper()))
                 ret = 100000008;
-            else if (leadSource.ToUpper().Equals("Egypt".ToUpper())
+            else if (leadSource.ToUpper().Equals("Egypt".ToUpper()))
                 ret = 100000009;
             else if (leadSource.ToUpper().Equals("France".ToUpper()))
                 ret = 100000010;
@@ -751,11 +830,11 @@ namespace CrmEnabledWPFWindowsClient1
                 ret = 857710015;
             else if (leadSource.ToUpper().Equals("Food and Tobacco Processing".ToUpper()))
                 ret = 857710016;
-              else if (leadSource.ToUpper().Equals("Goverment - State / Provincial".ToUpper()))
+            else if (leadSource.ToUpper().Equals("Goverment - State / Provincial".ToUpper()))
                 ret = 857710033;
-              else if (leadSource.ToUpper().Equals("Government - Federal".ToUpper()))
+            else if (leadSource.ToUpper().Equals("Government - Federal".ToUpper()))
                 ret = 857710034;
-              else if (leadSource.ToUpper().Equals("Government - Municipal".ToUpper()))
+            else if (leadSource.ToUpper().Equals("Government - Municipal".ToUpper()))
                 ret = 857710035;
             else if (leadSource.ToUpper().Equals("High Tech".ToUpper()))
                 ret = 857710036;
@@ -804,7 +883,7 @@ namespace CrmEnabledWPFWindowsClient1
             else if (leadSource.ToUpper().Equals("Wholesale".ToUpper()))
                 ret = 857710032;
             else if (leadSource.ToUpper().Equals("Other".ToUpper()))
-                ret = 100000000;     
+                ret = 100000000;
             else
                 ret = 100000000;
             return ret;
@@ -821,7 +900,7 @@ namespace CrmEnabledWPFWindowsClient1
             else if (leadSource.ToUpper().Equals("Director-level".ToUpper()))
                 ret = 857710002;
             else if (leadSource.ToUpper().Equals("Manager".ToUpper()))
-                ret = 857710003;          
+                ret = 857710003;
             else if (leadSource.ToUpper().Equals("Specialist/Officer".ToUpper()))
                 ret = 857710004;
             else if (leadSource.ToUpper().Equals("Other Unknown".ToUpper()))
@@ -832,7 +911,7 @@ namespace CrmEnabledWPFWindowsClient1
             return ret;
 
         }
-        
+
         //new_marketinginteractiontype
         private int SetFunction(string leadSource)
         {
